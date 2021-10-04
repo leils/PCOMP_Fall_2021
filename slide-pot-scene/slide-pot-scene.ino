@@ -2,14 +2,17 @@
 
 Servo myservo;
 
-const byte togglePin = A4;
-const byte potPin = A0;
-const byte servoPin = 5;
-const byte ledPin = 2;
-const byte photoPin = A2;
+const byte buttonPin = 3;
+const byte slidePin = A2;
+const byte servoPin = 7;
+const byte ledPin = 5;
+const byte photoPin = A0;
+
 const int photoThreshold = 15;
 //hysteresis adds "stickyness" to the crossing of the threshold
 const int hysteresisMargin = 10;
+const int minServo = 90;
+const int maxServo = 170;
 
 int servoPos = 0;
 
@@ -24,9 +27,9 @@ void setup() {
 
 void loop() {
   //note: NOT HANDLING MODE CHANGES PROPERLY (does not move to current state when moving manual -> automatic
-  int manualMode = digitalRead(togglePin);
+  int manualMode = digitalRead(buttonPin);
   if (manualMode) { //manual mode 
-    int potReading = analogRead(potPin);
+    int potReading = analogRead(slidePin);
     writeOut(potReading);
   } else { //Automatic mode 
     // need to reset state if crossing from manual to automatic. 
@@ -48,25 +51,25 @@ void loop() {
 }
 
 void writeOut(int rawPotOutput) {
-  Serial.println(rawPotOutput);
-
   if ((servoPos - rawPotOutput) > 15) {
     servoPos-= 10;
      
   } else if((servoPos - rawPotOutput) < -15) {
     servoPos+= 10;
   }
-  
-  myservo.write(map(servoPos, 0, 1023, 10, 180));
+
+  int servoValue = map(servoPos, 0, 1023, minServo, maxServo);
+  myservo.write(servoValue);
+  Serial.println(servoValue);
   analogWrite(ledPin, map(servoPos, 0, 1023, 0, 255));
 }
 
 void turnOnAll() {
-  myservo.write(178);
+  myservo.write(maxServo);
   analogWrite(ledPin, 255);
 }
 
 void turnOffAll() {
-  myservo.write(3);
+  myservo.write(minServo);
   analogWrite(ledPin, 0);
 }
