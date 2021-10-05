@@ -6,7 +6,7 @@ const int buttonPin = 3;
 const int ledPin = 5;
 const byte photoPin = A0;
 const byte slidePin = A2;
-const byte servoPin = 7;
+const byte servoPin = 9;
 
 void setup() {
   pinMode(buttonPin, INPUT);
@@ -27,7 +27,7 @@ void loop() {
 
   if (buttonValue) {
     analogWrite(ledPin, 255);
-    myservo.write(175);
+    myservo.write(180);
   } else {
     analogWrite(ledPin, 0);
     myservo.write(5);
