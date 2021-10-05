@@ -14,7 +14,7 @@ const int hysteresisMargin = 10;
 const int minServo = 100;
 const int maxServo = 170;
 
-int servoPos = 0;
+int servoPos = 0; // 0 - 1024 range 
 
 //stores on/off mode when in Automatic mode 
 int photoMode = LOW;
@@ -38,13 +38,11 @@ void loop() {
     Serial.println('switching change');
     turnOffAll();
     photoMode = LOW;
+    servoPos = minServo;
   } else { //Automatic mode 
-    // TODO: need to reset state if crossing from manual to automatic. 
     int photoReading = analogRead(photoPin);
-//    Serial.println(photoReading);
     if ((photoReading < (photoThreshold - hysteresisMargin)) && !photoMode) {
       //turn on if reading crosses threshold & was previously off
-      Serial.println("turning on");
       turnOnAll();
       photoMode = HIGH;
     } else if ((photoReading > (photoThreshold + hysteresisMargin)) && photoMode) {
@@ -70,16 +68,38 @@ void writeOut(int rawPotOutput) {
   int servoValue = map(servoPos, 0, 1023, minServo, maxServo);
   
   myservo.write(servoValue);
-  Serial.println(servoValue);
+  Serial.println(servoPos);
   analogWrite(ledPin, map(servoPos, 0, 1023, 0, 255));
 }
+
+//void writeOutput(val) {
+//  
+//}
+//
+//void upMode() {
+//  if (servoPos < 1004) {
+//    servoPos+= 10;
+//  }
+//
+//  writeOutput();
+//}
+//
+//void downMode() {
+//  if (servoPos > 20) {
+//    servoPos-= 10;
+//  }
+//
+//  writeOutput();
+//}
 
 void turnOnAll() {
   myservo.write(maxServo);
   analogWrite(ledPin, 255);
+  servoPos = 1020; //needed for consistency between states
 }
 
 void turnOffAll() {
   myservo.write(minServo);
   analogWrite(ledPin, 0);
+  servoPos = 0; //needed for consistency between states
 }
