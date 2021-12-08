@@ -2,8 +2,9 @@ const char sensorPins[] = {
   A0, A2, A3, A6, A7 
 };
 int sensorStatus[] = {
-  0, 0, 0, 0, 0
-}
+  1,1,1,1,1
+};
+
 int pinCount = 5;
 int lastCount = 0;
 int threshold = 100;
@@ -17,17 +18,17 @@ void setup() {
 }
 
 void loop() {
-  int count = 0;
+//  int count = 0;
 
   for (int pinIndex = 0; pinIndex < pinCount; pinIndex++) {
     int pinReading = analogRead(sensorPins[pinIndex]);
     int lastStatus = sensorStatus[pinIndex];
-    if ((pinReading < threshold) && (lastStatus == HIGH) { //cross threshold down
+    if ((pinReading < threshold) && (lastStatus == HIGH)) { //cross threshold down
 //      count++;
-      Serial.println(pinIndex);
+      Serial.write(pinIndex);
       sensorStatus[pinIndex] = !sensorStatus[pinIndex];
     } else if ((pinReading > threshold) && (lastStatus == LOW)) { //cross threshold up
-      Serial.println(pinIndex);
+      Serial.write(pinIndex);
       sensorStatus[pinIndex] = !sensorStatus[pinIndex];
     }
   }
