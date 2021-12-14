@@ -1,8 +1,12 @@
 const char sensorPins[] = {
-  A0, A2, A3, A6, A7 
+  A0, A1, A2, A3, A6
 };
 int sensorStatus[] = {
   1,1,1,1,1
+};
+
+const int solenoidPins[] = {
+  2, 4, 5, 6, 7
 };
 
 int pinCount = 5;
@@ -36,6 +40,12 @@ void loop() {
       sensorStatus[pinIndex] = !sensorStatus[pinIndex];
     }
   }
+
+  // int count should equal the number of statuses are low 
+  // if the count doesn't equal the last one & the new count is 5: 
+  // set the time in millis 
+  // wait a set time 
+  // run the solenoid thing 
 
 //  if (count != lastCount){
 //    Serial.print('latest count: ');
