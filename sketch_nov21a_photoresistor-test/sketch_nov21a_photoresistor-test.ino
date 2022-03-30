@@ -1,4 +1,4 @@
-const char sensorPin = A0;
+const char sensorPin = A2;
 
 void setup() {
   // put your setup code here, to run once:
